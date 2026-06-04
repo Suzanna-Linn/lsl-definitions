@@ -21,7 +21,7 @@ class BuilderParamType:
     luau_type: str
 
 
-_RULESET_TYPES: Dict[str, BuilderParamType] = {
+_RULESET_TYPES: dict[str, BuilderParamType] = {
     t.name: t
     for t in [
         BuilderParamType("integer", "number"),
@@ -51,17 +51,17 @@ class BuilderMethod:
     """Owning ruleset rule, prefix stripped (e.g. `COLOR` or `TYPE`)"""
     rule_tag: int
     """Int value of `rule_name`"""
-    variant_tag: Optional[int]
+    variant_tag: int | None
     """`None` for non-variant rules, int value of the variant constant otherwise"""
     face_target: bool
     nullable: bool
-    params: List[BuilderMethodParam]
+    params: list[BuilderMethodParam]
 
 
 @dataclasses.dataclass(frozen=True)
 class BuilderSpec:
     class_name: str
-    methods: List[BuilderMethod]
+    methods: list[BuilderMethod]
 
 
 @dataclasses.dataclass(frozen=True)
@@ -85,7 +85,7 @@ def _method_name(*parts: str) -> str:
     return words[0].lower() + "".join(w.capitalize() for w in words[1:])
 
 
-def _build_params(raw_params: List[Tuple[str, str]]) -> List[BuilderMethodParam]:
+def _build_params(raw_params: list[tuple[str, str]]) -> list[BuilderMethodParam]:
     """`raw_params` comes from YAML as a list of `[type_name, arg_name]` pairs."""
     return [
         BuilderMethodParam(name=arg_name, type=_RULESET_TYPES[type_name])
@@ -102,7 +102,7 @@ def expand_builder(lsl: "LSLDefinitions", ruleset_name: str, class_name: str) ->
     ruleset = lsl.builder_rulesets[ruleset_name]
     rule_enum = lsl.enums[ruleset["enum"]]
 
-    methods: List[BuilderMethod] = []
+    methods: list[BuilderMethod] = []
     for rule_name, rule in ruleset["rules"].items():
         face_target = bool(rule.get("face-target"))
         nullable = bool(rule.get("nullable"))

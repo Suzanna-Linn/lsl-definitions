@@ -259,24 +259,6 @@ export type rotation = quaternion</string>
             <key>value</key>
             <string>false</string>
          </map>
-         <key>_G</key>
-         <map>
-            <key>tooltip</key>
-            <string>The table of Lua builtin globals.</string>
-            <key>type</key>
-            <string>{[string]: any}</string>
-            <key>value</key>
-            <string>{}</string>
-         </map>
-         <key>_VERSION</key>
-         <map>
-            <key>tooltip</key>
-            <string></string>
-            <key>type</key>
-            <string>string</string>
-            <key>value</key>
-            <string>"Luau"</string>
-         </map>
          <key>lljson.array_mt</key>
          <map>
             <key>tooltip</key>
@@ -9598,6 +9580,24 @@ vector position - position in local coordinates
             <key>value</key>
             <string>vector(0.0, 0.0, 0.0)</string>
          </map>
+         <key>_G</key>
+         <map>
+            <key>tooltip</key>
+            <string>The table of Lua builtin globals.</string>
+            <key>type</key>
+            <string>any</string>
+            <key>value</key>
+            <string>{}</string>
+         </map>
+         <key>_VERSION</key>
+         <map>
+            <key>tooltip</key>
+            <string></string>
+            <key>type</key>
+            <string>string</string>
+            <key>value</key>
+            <string>"Luau"</string>
+         </map>
       </map>
       <key>events</key>
       <map>
@@ -10597,7 +10597,7 @@ vector position - position in local coordinates
                   </map>
                </map>
                <map>
-                  <key>message</key>
+                  <key>errorMessage</key>
                   <map>
                      <key>tooltip</key>
                      <string>Optional error message to display if the value is not truthy.</string>
@@ -10615,17 +10615,44 @@ vector position - position in local coordinates
             <key>tooltip</key>
             <string>Checks if the value is truthy; if not, raises an error with the optional message.</string>
          </map>
-         <key>error</key>
+         <key>dangerouslyexecuterequiredmodule</key>
          <map>
             <key>arguments</key>
             <array>
                <map>
-                  <key>obj</key>
+                  <key>f</key>
                   <map>
                      <key>tooltip</key>
-                     <string>The error object to raise.</string>
+                     <string></string>
                      <key>type</key>
-                     <string>any</string>
+                     <string>(...any) -&gt; ...any</string>
+                  </map>
+               </map>
+            </array>
+            <key>energy</key>
+            <real>10.0</real>
+            <key>return</key>
+            <string>...any</string>
+            <key>sleep</key>
+            <real>0.0</real>
+            <key>tooltip</key>
+            <string>Dangerously executes a required module function</string>
+         </map>
+         <key>error</key>
+         <map>
+            <key>type-arguments</key>
+            <array>
+               <string>T</string>
+            </array>
+            <key>arguments</key>
+            <array>
+               <map>
+                  <key>message</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>The error message to raise.</string>
+                     <key>type</key>
+                     <string>T</string>
                   </map>
                </map>
                <map>
@@ -10663,6 +10690,10 @@ vector position - position in local coordinates
          </map>
          <key>getmetatable</key>
          <map>
+            <key>type-arguments</key>
+            <array>
+               <string>T</string>
+            </array>
             <key>arguments</key>
             <array>
                <map>
@@ -10671,18 +10702,68 @@ vector position - position in local coordinates
                      <key>tooltip</key>
                      <string>The object to get the metatable for.</string>
                      <key>type</key>
-                     <string>any</string>
+                     <string>T</string>
                   </map>
                </map>
             </array>
             <key>energy</key>
             <real>10.0</real>
             <key>return</key>
-            <string>{[any]: any}?</string>
+            <string>getmetatable&lt;T&gt;</string>
             <key>sleep</key>
             <real>0.0</real>
             <key>tooltip</key>
             <string>Returns the metatable for the specified object.</string>
+         </map>
+         <key>ipairs</key>
+         <map>
+            <key>type-arguments</key>
+            <array>
+               <string>V</string>
+            </array>
+            <key>arguments</key>
+            <array>
+               <map>
+                  <key>tab</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>The table to iterate over.</string>
+                     <key>type</key>
+                     <string>{V}</string>
+                  </map>
+               </map>
+            </array>
+            <key>energy</key>
+            <real>10.0</real>
+            <key>return</key>
+            <string>(({V}, number) -&gt; (number?, V), {V}, number)</string>
+            <key>sleep</key>
+            <real>0.0</real>
+            <key>tooltip</key>
+            <string>Returns an iterator for numeric key-value pairs in the table.</string>
+         </map>
+         <key>newproxy</key>
+         <map>
+            <key>arguments</key>
+            <array>
+               <map>
+                  <key>mt</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>Optional boolean to create a modifiable metatable.</string>
+                     <key>type</key>
+                     <string>boolean?</string>
+                  </map>
+               </map>
+            </array>
+            <key>energy</key>
+            <real>10.0</real>
+            <key>return</key>
+            <string>any</string>
+            <key>sleep</key>
+            <real>0.0</real>
+            <key>tooltip</key>
+            <string>Creates a new untyped userdata object with an optional metatable.</string>
          </map>
          <key>next</key>
          <map>
@@ -10715,37 +10796,83 @@ vector position - position in local coordinates
             <key>energy</key>
             <real>10.0</real>
             <key>return</key>
-            <string>(K, V)?</string>
+            <string>(K?, V)</string>
             <key>sleep</key>
             <real>0.0</real>
             <key>tooltip</key>
             <string>Returns the next key-value pair in the table traversal order.</string>
          </map>
-         <key>newproxy</key>
+         <key>pairs</key>
          <map>
+            <key>type-arguments</key>
+            <array>
+               <string>K</string>
+               <string>V</string>
+            </array>
             <key>arguments</key>
             <array>
                <map>
-                  <key>mt</key>
+                  <key>t</key>
                   <map>
                      <key>tooltip</key>
-                     <string>Optional boolean to create a modifiable metatable.</string>
+                     <string>The table to iterate over.</string>
                      <key>type</key>
-                     <string>boolean?</string>
+                     <string>{[K]: V}</string>
                   </map>
                </map>
             </array>
             <key>energy</key>
             <real>10.0</real>
             <key>return</key>
-            <string>any</string>
+            <string>(({[K]: V}, K?) -&gt; (K?, V), {[K]: V}, K)</string>
             <key>sleep</key>
             <real>0.0</real>
             <key>tooltip</key>
-            <string>Creates a new untyped userdata object with an optional metatable.</string>
+            <string>Returns an iterator for all key-value pairs in the table.</string>
+         </map>
+         <key>pcall</key>
+         <map>
+            <key>type-arguments</key>
+            <array>
+               <string>A...</string>
+               <string>R...</string>
+            </array>
+            <key>arguments</key>
+            <array>
+               <map>
+                  <key>f</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>A function to be called.</string>
+                     <key>type</key>
+                     <string>(A...) -&gt; R...</string>
+                  </map>
+               </map>
+               <map>
+                  <key>...</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>Arguments to pass to the function.</string>
+                     <key>type</key>
+                     <string>A...</string>
+                  </map>
+               </map>
+            </array>
+            <key>energy</key>
+            <real>10.0</real>
+            <key>return</key>
+            <string>(boolean, R...)</string>
+            <key>sleep</key>
+            <real>0.0</real>
+            <key>tooltip</key>
+            <string>Calls function f with parameters args, returning success and function results or an error.</string>
          </map>
          <key>print</key>
          <map>
+            <key>type-arguments</key>
+            <array>
+               <string>T...</string>
+            </array>
             <key>arguments</key>
             <array>
                <map>
@@ -10754,7 +10881,7 @@ vector position - position in local coordinates
                      <key>tooltip</key>
                      <string>Arguments to print to standard output.</string>
                      <key>type</key>
-                     <string>...any</string>
+                     <string>T...</string>
                   </map>
                </map>
             </array>
@@ -10769,6 +10896,11 @@ vector position - position in local coordinates
          </map>
          <key>rawequal</key>
          <map>
+            <key>type-arguments</key>
+            <array>
+               <string>T1</string>
+               <string>T2</string>
+            </array>
             <key>arguments</key>
             <array>
                <map>
@@ -10777,7 +10909,7 @@ vector position - position in local coordinates
                      <key>tooltip</key>
                      <string>First object to compare.</string>
                      <key>type</key>
-                     <string>any</string>
+                     <string>T1</string>
                   </map>
                </map>
                <map>
@@ -10786,7 +10918,7 @@ vector position - position in local coordinates
                      <key>tooltip</key>
                      <string>Second object to compare.</string>
                      <key>type</key>
-                     <string>any</string>
+                     <string>T2</string>
                   </map>
                </map>
             </array>
@@ -10836,6 +10968,34 @@ vector position - position in local coordinates
             <key>tooltip</key>
             <string>Performs a table lookup bypassing metatables.</string>
          </map>
+         <key>rawlen</key>
+         <map>
+            <key>type-arguments</key>
+            <array>
+               <string>K</string>
+               <string>V</string>
+            </array>
+            <key>arguments</key>
+            <array>
+               <map>
+                  <key>t</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>The table or string to compute the length of.</string>
+                     <key>type</key>
+                     <string>{[K]: V} | string</string>
+                  </map>
+               </map>
+            </array>
+            <key>energy</key>
+            <real>10.0</real>
+            <key>return</key>
+            <string>number</string>
+            <key>sleep</key>
+            <real>0.0</real>
+            <key>tooltip</key>
+            <string>Returns the length of a table or string bypassing metatables.</string>
+         </map>
          <key>rawset</key>
          <map>
             <key>type-arguments</key>
@@ -10882,36 +11042,35 @@ vector position - position in local coordinates
             <key>tooltip</key>
             <string>Assigns a value to a table field bypassing metatables.</string>
          </map>
-         <key>rawlen</key>
+         <key>require</key>
          <map>
-            <key>type-arguments</key>
-            <array>
-               <string>K</string>
-               <string>V</string>
-            </array>
             <key>arguments</key>
             <array>
                <map>
-                  <key>t</key>
+                  <key>target</key>
                   <map>
                      <key>tooltip</key>
-                     <string>The table or string to compute the length of.</string>
+                     <string>The name of the external module.</string>
                      <key>type</key>
-                     <string>{[K]: V} | string</string>
+                     <string>any</string>
                   </map>
                </map>
             </array>
             <key>energy</key>
             <real>10.0</real>
             <key>return</key>
-            <string>number</string>
+            <string>any</string>
             <key>sleep</key>
             <real>0.0</real>
             <key>tooltip</key>
-            <string>Returns the length of a table or string bypassing metatables.</string>
+            <string>Execute the named external module.</string>
          </map>
          <key>select</key>
          <map>
+            <key>type-arguments</key>
+            <array>
+               <string>A...</string>
+            </array>
             <key>arguments</key>
             <array>
                <map>
@@ -10929,14 +11088,14 @@ vector position - position in local coordinates
                      <key>tooltip</key>
                      <string>The arguments to select from.</string>
                      <key>type</key>
-                     <string>...any</string>
+                     <string>A...</string>
                   </map>
                </map>
             </array>
             <key>energy</key>
             <real>10.0</real>
             <key>return</key>
-            <string>any</string>
+            <string>...any</string>
             <key>sleep</key>
             <real>0.0</real>
             <key>tooltip</key>
@@ -10944,6 +11103,11 @@ vector position - position in local coordinates
          </map>
          <key>setmetatable</key>
          <map>
+            <key>type-arguments</key>
+            <array>
+               <string>T</string>
+               <string>MT</string>
+            </array>
             <key>arguments</key>
             <array>
                <map>
@@ -10952,7 +11116,7 @@ vector position - position in local coordinates
                      <key>tooltip</key>
                      <string>The table to set the metatable for.</string>
                      <key>type</key>
-                     <string>{ [any]: any }</string>
+                     <string>T</string>
                   </map>
                </map>
                <map>
@@ -10961,14 +11125,14 @@ vector position - position in local coordinates
                      <key>tooltip</key>
                      <string>The metatable to set.</string>
                      <key>type</key>
-                     <string>{ [any]: any }?</string>
+                     <string>MT</string>
                   </map>
                </map>
             </array>
             <key>energy</key>
             <real>10.0</real>
             <key>return</key>
-            <string>()</string>
+            <string>setmetatable&lt;T, MT&gt;</string>
             <key>sleep</key>
             <real>0.0</real>
             <key>tooltip</key>
@@ -10979,12 +11143,12 @@ vector position - position in local coordinates
             <key>arguments</key>
             <array>
                <map>
-                  <key>s</key>
+                  <key>value</key>
                   <map>
                      <key>tooltip</key>
                      <string>The string to convert to a number.</string>
                      <key>type</key>
-                     <string>string</string>
+                     <string>string? | number</string>
                   </map>
                </map>
                <map>
@@ -11006,312 +11170,12 @@ vector position - position in local coordinates
             <key>tooltip</key>
             <string>Converts the input string to a number in the specified base.</string>
          </map>
-         <key>tostring</key>
-         <map>
-            <key>arguments</key>
-            <array>
-               <map>
-                  <key>obj</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>The object to convert to a string.</string>
-                     <key>type</key>
-                     <string>any</string>
-                  </map>
-               </map>
-            </array>
-            <key>energy</key>
-            <real>10.0</real>
-            <key>return</key>
-            <string>string</string>
-            <key>sleep</key>
-            <real>0.0</real>
-            <key>tooltip</key>
-            <string>Converts the input object to a string.</string>
-         </map>
-         <key>type</key>
-         <map>
-            <key>arguments</key>
-            <array>
-               <map>
-                  <key>obj</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>The object to get the type of.</string>
-                     <key>type</key>
-                     <string>any</string>
-                  </map>
-               </map>
-            </array>
-            <key>energy</key>
-            <real>10.0</real>
-            <key>return</key>
-            <string>string</string>
-            <key>sleep</key>
-            <real>0.0</real>
-            <key>tooltip</key>
-            <string>Returns the type of the object as a string.</string>
-         </map>
-         <key>typeof</key>
-         <map>
-            <key>arguments</key>
-            <array>
-               <map>
-                  <key>obj</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>The object to get the type of.</string>
-                     <key>type</key>
-                     <string>any</string>
-                  </map>
-               </map>
-            </array>
-            <key>energy</key>
-            <real>10.0</real>
-            <key>return</key>
-            <string>string</string>
-            <key>sleep</key>
-            <real>0.0</real>
-            <key>tooltip</key>
-            <string>Returns the type of the object, including custom userdata types.</string>
-         </map>
-         <key>ipairs</key>
-         <map>
-            <key>type-arguments</key>
-            <array>
-               <string>V</string>
-            </array>
-            <key>arguments</key>
-            <array>
-               <map>
-                  <key>t</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>The table to iterate over.</string>
-                     <key>type</key>
-                     <string>{V}</string>
-                  </map>
-               </map>
-            </array>
-            <key>energy</key>
-            <real>10.0</real>
-            <key>return</key>
-            <string>(({V}, number) -&gt; (number?, V), {V}, number)</string>
-            <key>sleep</key>
-            <real>0.0</real>
-            <key>tooltip</key>
-            <string>Returns an iterator for numeric key-value pairs in the table.</string>
-         </map>
-         <key>pairs</key>
-         <map>
-            <key>type-arguments</key>
-            <array>
-               <string>K</string>
-               <string>V</string>
-            </array>
-            <key>arguments</key>
-            <array>
-               <map>
-                  <key>t</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>The table to iterate over.</string>
-                     <key>type</key>
-                     <string>{[K]: V}</string>
-                  </map>
-               </map>
-            </array>
-            <key>energy</key>
-            <real>10.0</real>
-            <key>return</key>
-            <string>(({[K], V}, K) -&gt; (K?, V), {[K], V}, K)</string>
-            <key>sleep</key>
-            <real>0.0</real>
-            <key>tooltip</key>
-            <string>Returns an iterator for all key-value pairs in the table.</string>
-         </map>
-         <key>pcall</key>
-         <map>
-            <key>type-arguments</key>
-            <array>
-               <string>A...</string>
-               <string>R...</string>
-            </array>
-            <key>arguments</key>
-            <array>
-               <map>
-                  <key>f</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>A function to be called.</string>
-                     <key>type</key>
-                     <string>(A...) -&gt; R...</string>
-                  </map>
-               </map>
-               <map>
-                  <key>...</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>Arguments to pass to the function.</string>
-                     <key>type</key>
-                     <string>A...</string>
-                  </map>
-               </map>
-            </array>
-            <key>energy</key>
-            <real>10.0</real>
-            <key>return</key>
-            <string>(boolean, R...)</string>
-            <key>sleep</key>
-            <real>0.0</real>
-            <key>tooltip</key>
-            <string>Calls function f with parameters args, returning success and function results or an error.</string>
-         </map>
-         <key>xpcall</key>
-         <map>
-            <key>type-arguments</key>
-            <array>
-               <string>E</string>
-               <string>A...</string>
-               <string>R1...</string>
-               <string>R2...</string>
-            </array>
-            <key>arguments</key>
-            <array>
-               <map>
-                  <key>f</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>A function to be called.</string>
-                     <key>type</key>
-                     <string>(A...) -&gt; R1...</string>
-                  </map>
-               </map>
-               <map>
-                  <key>e</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>Error handler function.</string>
-                     <key>type</key>
-                     <string>(E) -&gt; R2...</string>
-                  </map>
-               </map>
-               <map>
-                  <key>...</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>Arguments to pass to the function.</string>
-                     <key>type</key>
-                     <string>A...</string>
-                  </map>
-               </map>
-            </array>
-            <key>energy</key>
-            <real>10.0</real>
-            <key>return</key>
-            <string>(boolean, R1...)</string>
-            <key>sleep</key>
-            <real>0.0</real>
-            <key>tooltip</key>
-            <string>Calls function f with parameters args, handling errors with e if they occur.</string>
-         </map>
-         <key>require</key>
-         <map>
-            <key>arguments</key>
-            <array>
-               <map>
-                  <key>target</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>The name of the external module.</string>
-                     <key>type</key>
-                     <string>string</string>
-                  </map>
-               </map>
-            </array>
-            <key>energy</key>
-            <real>10.0</real>
-            <key>return</key>
-            <string>any</string>
-            <key>sleep</key>
-            <real>0.0</real>
-            <key>tooltip</key>
-            <string>Execute the named external module.</string>
-         </map>
-         <key>unpack</key>
-         <map>
-            <key>type-arguments</key>
-            <array>
-               <string>V</string>
-            </array>
-            <key>arguments</key>
-            <array>
-               <map>
-                  <key>a</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>Array from which to extract values.</string>
-                     <key>type</key>
-                     <string>{V}</string>
-                  </map>
-               </map>
-               <map>
-                  <key>f</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>Starting index (optional, defaults to 1).</string>
-                     <key>type</key>
-                     <string>number?</string>
-                  </map>
-               </map>
-               <map>
-                  <key>t</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string>Ending index (optional, defaults to #a).</string>
-                     <key>type</key>
-                     <string>number?</string>
-                  </map>
-               </map>
-            </array>
-            <key>energy</key>
-            <real>10.0</real>
-            <key>return</key>
-            <string>...V</string>
-            <key>sleep</key>
-            <real>0.0</real>
-            <key>tooltip</key>
-            <string>Returns values from an array in the specified index range.</string>
-         </map>
-         <key>dangerouslyexecuterequiredmodule</key>
-         <map>
-            <key>arguments</key>
-            <array>
-               <map>
-                  <key>f</key>
-                  <map>
-                     <key>tooltip</key>
-                     <string></string>
-                     <key>type</key>
-                     <string>(...any) -&gt; ...any</string>
-                  </map>
-               </map>
-            </array>
-            <key>energy</key>
-            <real>10.0</real>
-            <key>return</key>
-            <string>...any</string>
-            <key>sleep</key>
-            <real>0.0</real>
-            <key>tooltip</key>
-            <string>Dangerously executes a required module function</string>
-         </map>
          <key>toquaternion</key>
          <map>
             <key>arguments</key>
             <array>
                <map>
-                  <key>val</key>
+                  <key>value</key>
                   <map>
                      <key>tooltip</key>
                      <string></string>
@@ -11334,7 +11198,7 @@ vector position - position in local coordinates
             <key>arguments</key>
             <array>
                <map>
-                  <key>val</key>
+                  <key>value</key>
                   <map>
                      <key>tooltip</key>
                      <string></string>
@@ -11351,6 +11215,33 @@ vector position - position in local coordinates
             <real>0.0</real>
             <key>tooltip</key>
             <string>Converts a string to a rotation (quaternion), returns nil if invalid</string>
+         </map>
+         <key>tostring</key>
+         <map>
+            <key>type-arguments</key>
+            <array>
+               <string>T</string>
+            </array>
+            <key>arguments</key>
+            <array>
+               <map>
+                  <key>value</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>The object to convert to a string.</string>
+                     <key>type</key>
+                     <string>T</string>
+                  </map>
+               </map>
+            </array>
+            <key>energy</key>
+            <real>10.0</real>
+            <key>return</key>
+            <string>string</string>
+            <key>sleep</key>
+            <real>0.0</real>
+            <key>tooltip</key>
+            <string>Converts the input object to a string.</string>
          </map>
          <key>touuid</key>
          <map>
@@ -11397,6 +11288,153 @@ vector position - position in local coordinates
             <real>0.0</real>
             <key>tooltip</key>
             <string>Converts a string to a vector, returns nil if invalid</string>
+         </map>
+         <key>type</key>
+         <map>
+            <key>type-arguments</key>
+            <array>
+               <string>T</string>
+            </array>
+            <key>arguments</key>
+            <array>
+               <map>
+                  <key>obj</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>The object to get the type of.</string>
+                     <key>type</key>
+                     <string>T</string>
+                  </map>
+               </map>
+            </array>
+            <key>energy</key>
+            <real>10.0</real>
+            <key>return</key>
+            <string>string</string>
+            <key>sleep</key>
+            <real>0.0</real>
+            <key>tooltip</key>
+            <string>Returns the type of the object as a string.</string>
+         </map>
+         <key>typeof</key>
+         <map>
+            <key>type-arguments</key>
+            <array>
+               <string>T</string>
+            </array>
+            <key>arguments</key>
+            <array>
+               <map>
+                  <key>obj</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>The object to get the type of.</string>
+                     <key>type</key>
+                     <string>T</string>
+                  </map>
+               </map>
+            </array>
+            <key>energy</key>
+            <real>10.0</real>
+            <key>return</key>
+            <string>string</string>
+            <key>sleep</key>
+            <real>0.0</real>
+            <key>tooltip</key>
+            <string>Returns the type of the object, including custom userdata types.</string>
+         </map>
+         <key>unpack</key>
+         <map>
+            <key>type-arguments</key>
+            <array>
+               <string>V</string>
+            </array>
+            <key>arguments</key>
+            <array>
+               <map>
+                  <key>tab</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>Array from which to extract values.</string>
+                     <key>type</key>
+                     <string>{V}</string>
+                  </map>
+               </map>
+               <map>
+                  <key>i</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>Starting index (optional, defaults to 1).</string>
+                     <key>type</key>
+                     <string>number?</string>
+                  </map>
+               </map>
+               <map>
+                  <key>j</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>Ending index (optional, defaults to #a).</string>
+                     <key>type</key>
+                     <string>number?</string>
+                  </map>
+               </map>
+            </array>
+            <key>energy</key>
+            <real>10.0</real>
+            <key>return</key>
+            <string>...V</string>
+            <key>sleep</key>
+            <real>0.0</real>
+            <key>tooltip</key>
+            <string>Returns values from an array in the specified index range.</string>
+         </map>
+         <key>xpcall</key>
+         <map>
+            <key>type-arguments</key>
+            <array>
+               <string>E</string>
+               <string>A...</string>
+               <string>R1...</string>
+               <string>R2...</string>
+            </array>
+            <key>arguments</key>
+            <array>
+               <map>
+                  <key>f</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>A function to be called.</string>
+                     <key>type</key>
+                     <string>(A...) -&gt; R1...</string>
+                  </map>
+               </map>
+               <map>
+                  <key>err</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>Error handler function.</string>
+                     <key>type</key>
+                     <string>(E) -&gt; R2...</string>
+                  </map>
+               </map>
+               <map>
+                  <key>...</key>
+                  <map>
+                     <key>tooltip</key>
+                     <string>Arguments to pass to the function.</string>
+                     <key>type</key>
+                     <string>A...</string>
+                  </map>
+               </map>
+            </array>
+            <key>energy</key>
+            <real>10.0</real>
+            <key>return</key>
+            <string>(boolean, R1...)</string>
+            <key>sleep</key>
+            <real>0.0</real>
+            <key>tooltip</key>
+            <string>Calls function f with parameters args, handling errors with e if they occur.</string>
          </map>
          <key>bit32</key>
          <map>
@@ -15068,7 +15106,7 @@ Returns true if result is non-zero.</string>
             <key>sleep</key>
             <real>0.0</real>
             <key>tooltip</key>
-            <string>Returns a lowercase version of the input string.</string>
+            <string>Returns a lowercase version of the input string. Only works with ASCII. Use ll.ToLower for strings that may contain Unicode.</string>
          </map>
          <key>string.match</key>
          <map>
@@ -15356,7 +15394,7 @@ Returns true if result is non-zero.</string>
             <key>sleep</key>
             <real>0.0</real>
             <key>tooltip</key>
-            <string>Returns an uppercase version of the input string.</string>
+            <string>Returns an uppercase version of the input string. Only works with ASCII. Use ll.ToUpper for strings that may contain Unicode.</string>
          </map>
          <key>table</key>
          <map>

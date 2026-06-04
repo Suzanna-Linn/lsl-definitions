@@ -9,7 +9,7 @@
         },
         "type": {
             "markdownDescription": "A luau-format type definition.",
-            "pattern": "^([ \n?&|,{}\\[\\]():a-zA-Z0-9_]|\"[^\"]*\"|\\.\\.\\.|->)*$",
+            "pattern": "^([ \n?&|,{}\\[\\]()<>:a-zA-Z0-9_]|\"[^\"]*\"|\\.\\.\\.|->)*$",
             "type": "string"
         },
         "selene-type": {
@@ -190,6 +190,23 @@
                 "comment": {
                     "markdownDescription": "A brief description of this function.",
                     "type": "string"
+                },
+                "typechecker": {
+                    "type": "object",
+                    "description": "Flags specific to the internals of luau-analyze and luau-lsp.",
+                    "additionalProperties": false,
+                    "properties": {
+                        "builtin": {
+                            "const": true,
+                            "description": "This function is defined in BuiltinDefinitions.cpp, rather than EmbeddedBuiltinDefinitions.cpp.",
+                            "type": "boolean"
+                        },
+                        "magic": {
+                            "const": true,
+                            "description": "The typechecker has custom logic for this function. Look for attachMagicFunction in the source code.",
+                            "type": "boolean"
+                        }
+                    }
                 }
             },
             "required": ["name"],
@@ -272,7 +289,7 @@
             "items": { "$ref": "#/$defs/property" },
             "type": "array"
         },
-        "global-functions": {
+        "functions": {
             "items": { "$ref": "#/$defs/function" },
             "type": "array"
         },
@@ -286,10 +303,6 @@
         },
         "builtin-constants": {
             "items": { "$ref": "#/$defs/property" },
-            "type": "array"
-        },
-        "builtin-functions": {
-            "items": { "$ref": "#/$defs/function" },
             "type": "array"
         },
         "controls": {
@@ -327,6 +340,24 @@
                 }
             },
             "type": "object"
+        },
+        "metamethods": {
+            "additionalProperties": false,
+            "patternProperties": {
+                "^__[a-z]*": {
+                    "properties": {
+                        "tooltip": {
+                            "markdownDescription": "A brief description of this metamethod.",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "tooltip"
+                    ],
+                    "type": "object"
+                }
+            },
+            "type": "object"
         }
     },
     "required": [
@@ -334,13 +365,13 @@
         "base-classes",
         "type-aliases",
         "classes",
-        "global-functions",
+        "functions",
         "modules",
         "constants",
         "controls",
         "builtin-types",
         "builtin-constants",
-        "builtin-functions"
+        "metamethods"
     ],
     "title": "Second Life SLua Definitions",
     "type": "object"

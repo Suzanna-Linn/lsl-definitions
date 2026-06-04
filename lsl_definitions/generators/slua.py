@@ -51,15 +51,23 @@ def gen_luau_lsp_defs(definitions: LSLDefinitions, slua_definitions: SLuaDefinit
     for class_ in (class_ for class_ in classes if class_.name[0].isupper()):
         class_.write_luau_def(defs)
     defs.write("\n")
-    for func in slua_definitions.global_functions:
+    for func in slua_definitions.functions:
         if func.private or func.local_only:
             continue
+        if not func.typechecker_flags.fully_defined:
+            defs.write("-- ")
         defs.write("declare ")
         func.write_luau_global_def(defs)
     for module in sorted(slua_definitions.modules, key=lambda x: x.name):
         if module.name in {"ll", "llcompat"}:
             continue
+        if module.name == "string":
+            defs.write(
+                "--[[ commented out to avoid shadowing magic type functions find, format, gmatch, and match\n"
+            )
         module.write_luau_def(defs)
+        if module.name == "string":
+            defs.write("--]]\n")
     for var in slua_definitions.global_variables:
         defs.write("declare ")
         defs.write(var.to_luau_def())
@@ -125,14 +133,14 @@ def gen_selene_yml(definitions: LSLDefinitions, slua_definitions: SLuaDefinition
             return type_map[type_str]
         if type_str in type_aliases:
             return type_aliases[type_str].selene_type
-        if type_str.startswith("..."):
-            return "..."
         if type_str.startswith("{") and type_str.endswith("}"):
             return "table"
         if "|" in type_str:
             return default
         if "->" in type_str:
             return "function"
+        if "..." in type_str:
+            return "..."
         return default
 
     def selene_property(prop: SLuaProperty) -> dict:
@@ -226,9 +234,7 @@ def gen_selene_yml(definitions: LSLDefinitions, slua_definitions: SLuaDefinition
     for const in sorted(slua_definitions.global_constants, key=lambda x: x.name):
         if not const.private:
             selene["globals"][const.name] = selene_property(const)
-    # for func in slua_definitions.builtinFunctions:
-    #     selene["globals"][func.name] = func.to_selene_dict()
-    for func in slua_definitions.global_functions:
+    for func in sorted(slua_definitions.functions, key=lambda x: x.name):
         if not func.private and not func.local_only:
             selene["globals"][func.name] = selene_function(func)
     for module in sorted(modules.values(), key=lambda x: x.name):
