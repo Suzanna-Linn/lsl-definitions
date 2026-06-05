@@ -58,6 +58,38 @@ validate-lsl-definitions-via-jsonschema
 pre-commit run --all
 ```
 
+## Alternative way using the GitHub web interface and Codespaces. 
+
+### Edit & Save (On GitHub)
+- **Fork** the repository to your account.
+- **Edit** the file(s) directly on the GitHub website.
+- Click **Commit changes...**
+- Select **"Create a new branch for this commit..."** (`patch-1`).
+- Click **Propose changes**. *(Stop here. Do not click "Create pull request" yet).*
+- Click the repository name at the top left to return to your fork's main page.
+
+### Run Scripts (In Codespaces)
+- On your fork's main page, click the branch dropdown (usually says `main`) and **switch to your new branch** (`patch-1`).
+- Click the green **Code** button, go to the **Codespaces** tab, and click **Create codespace on [branch name]**.
+- Once the Codespace loads, open the **Terminal** (bottom of the screen).
+- **Install dependencies**: `pip install llsd`.
+- **Run the required script**:`bash ./gen_all_definitions.sh`.
+- *If it shows syntax errors:* Open the file in the Codespace explorer, fix the typo, save, and run the script again.
+
+### Commit Generated Files (In Codespaces)
+- Click the **Source Control** icon on the far left menu (looks like a branch).
+- Hover over "Changes" and click the **`+` (Plus)** icon to stage all updated files.
+- Type a brief commit message (*"Update generated files"*).
+- Click the blue **Commit** button.
+- Click the blue **Sync Changes** button.
+- Close the Codespace browser tab.
+
+### Open the Pull Request (On GitHub)
+- Go back to your fork's main page on GitHub.
+- Look for the yellow banner saying you recently pushed to your branch and click **Compare & pull request**.
+- Add a title and description for your PR.
+- Click **Create pull request**.
+
 ## Pull Request Guidelines
 
 - **Be specific** in your PR description about what you're improving
